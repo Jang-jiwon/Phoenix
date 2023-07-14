@@ -27,7 +27,11 @@ public class PortfolioDAO {
 	public boolean saveDB(PortfolioDTO portfolio) {
 		boolean result = false ;
 		int cnt = 0;
-		cnt = sqlsession.selectOne("User.checkPortfolio", portfolio);
+		try {
+			cnt = sqlsession.selectOne("User.checkPortfolio", portfolio);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if(cnt == 0) {
 			if(sqlsession.insert("User.savePortfolio", portfolio) == 1) {
 				result = true;
@@ -37,9 +41,6 @@ public class PortfolioDAO {
 				result = true;
 			}
 		}
-		
-		
-		
 		return result;
 	}
 	

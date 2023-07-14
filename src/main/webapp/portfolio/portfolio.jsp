@@ -66,9 +66,7 @@
 				<h1 style="margin: 50px ;  ">포트폴리오</h1>
 			</div>
 			<div id="pfs" class="pfs"><button class="add" id="add" onclick="location='loadadd.jsp?pnum=empty'" style="align-content: center;" >추가</button></div>
-<!-- 			<button class="add" id="add" >추가</button>  -->
 			
-<!-- 				<button class="add" id="add" onclick="newpf()">추가</button>  -->
 		</div>
 	</div>
 </body>
@@ -76,8 +74,6 @@
 	</script>
 	
 	<script>
-// 	location.href ="/portfolio/add.jsp";
-
 			let xhr4 = new XMLHttpRequest();
 			
 			xhr4.open("POST","/portfolio/loadDB.jsp",true);//tableNum 이 cnum임
@@ -91,11 +87,7 @@
 				      var DB = xhr4.responseText.trim();
 				      // /기준으로 각각 다른 포트폴리오
 				      // & 기준으로 포트폴리오별 요소
-				      console.log("==================DB :"+DB+"============");
 				      tbDB = DB.split('/--/');
-				      console.log("==================tbDB :"+tbDB+"============");
-// 				      sessionStorage.setItem("DBlen",DBlen);
-				      
 					  makeDBtable(tbDB); //테이블 코드 생성
 				    } else {
 				      console.log('fail portfolio loadDB...');
@@ -113,7 +105,6 @@
 						
 					}
 					//tbDB[1] = tb_1&수정제목11&수정내용11
-					//	 				console.log("==================tbDB :"+tbDB[i]+"============");
 					var strs =tbDB[i].split('&--&');//테이블번호 , 타이틀 , 대표이미지주소 - 104,Portfolio Title,/portfolio/imgs/ex.png
 					console.log("==================strs :"+strs[0]+"============");
 					DBtableCode[i] =  `<div id="pnum`+strs[1]+`" class = "panel"  onclick="gopf(pnum`+strs[1]+`.id)" style="width: 300px;" align="center">
@@ -129,20 +120,8 @@
 			}
 			
 	function gopf(pnums) {
-// 		console.log("==================pnum :"+pnums.substr(4,pnums.length) +"============");
-//		pnums.substr(4,pnums.length) - pnum
 		var  pnum = pnums.substr(4,pnums.length);
-		alert(pnum);
 		location.href="/portfolio/loadDBPF.jsp?pnum=" + pnum;
-	}
-			
-			
-	function newpf() {
-		const pfs = document.getElementById('pfs');
-		
-		fetch('/portfolio/objs.jsp')
-		.then(res => res.text())
-		.then(data => pfs.innerHTML = data);
 	}
 
 </script>

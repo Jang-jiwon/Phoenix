@@ -21,7 +21,7 @@ public class PortfolioAction implements Action{
 	    		request.getParameter("ptitle"),
 	    		request.getParameter("pcontents"), 
 	    		request.getParameter("purl"), 
-	    		"testPATH", 
+	    		request.getParameter("ppath"), 
 	    		member.getUserid());
 	    
 	    ActionForward forward = new ActionForward();

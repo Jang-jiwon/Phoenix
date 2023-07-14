@@ -1,6 +1,7 @@
 <%@page import="com.phoenix.portfolio.PortfolioDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +9,7 @@
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <style>
+input:focus {outline: none;} /* outline 테두리 없애기 */
 	table{
 		margin:0 auto;
 		width: 80%;
@@ -123,20 +125,28 @@
 						<!-- 링크 -->
 						<tr>
 							<td class="form-group" >
-								<input type="text" id="purl" class="purl" placeholder="  URL 추가" value=" ${portfolios.purl}">
+								<input type="text" id="purl" class="purl" placeholder="  URL 추가" value="${portfolios.purl}" >
 							</td>
 						</tr>
 						<!-- 이미지 -->
 						<tr>
 							<td>
-								<div id="image_container" ></div>
+								<div id="image_container" >
+									<c:choose> 
+										<c:when test="${not empty portfolios.ppath}"> 
+											<img id="yImg"  class="isimg" src="${portfolios.ppath}">
+										</c:when>
+										<c:otherwise> 
+											<img style="display: none;" id="noImg" class="isimg" >
+										</c:otherwise>
+									</c:choose>
+								</div>
 								<div class="filebox" style="display: flex; padding-right : 5px;">
-								    <input class="upload-name" placeholder="첨부파일" style="border: none;">
+								    <input id="upload-name"  class="upload-name" placeholder="대표이미지" style="border: none;" readonly="readonly">
 								    <label for="file" style="padding-left: 14px;">파일찾기</label> 
 <!-- 								    https://m.blog.naver.com/whatacodingday/221844492754
-										- 파일가져오기참고링크..?
- -->
-								    <input type="file" id="file" class="file" onchange="setThumbnail(event);" accept="image/*" > 
+										- 파일가져오기참고링크..? -->
+								    <input type="file" id="file" class="file" accept="image/*" onchange="changeImg(event);" > 
 								</div>
 							</td>
 						</tr>
@@ -148,37 +158,69 @@
 		</div>
 	</div>
 </body>
-	<script src="../header.js"></script>
-	<!-- 이미지 미리보기, 파일명 출력 -->
-	<script src="./file_path.js"></script>
+<script src="../header.js"></script>
+<script >
+<%String path = ((PortfolioDTO)session.getAttribute("portfolios")).getPpath();%>
+	var ptitle;
+	var pcontents;
+	var purl;
+	var pnum;
+	var ppath = '<%= path %>';;
+	var input;
+	var showImg;
+	var uploadNameInput;
 	
-	
-	<script >
-
-
-	function savedb(){	//num은 테이블 번호 즉 몇번째 테이블인지 - 0부터 시작
-		var ptitle = document.getElementById('ptitle');
-		var pcontents = document.getElementById('pcontents');
-		var purl = document.getElementById('pcontents');
-		var ppath = document.getElementById('ppath');
-		var pnum = "<%=request.getParameter("pnum")%>";
-		console.log("======pnum=======pnum========="+pnum+"===========");
+	function changeImg(event) {
+		uploadNameInput = document.querySelector(".upload-name");
+		showImg = document.getElementsByClassName("isimg");
+		input = document.getElementById('file');
+		// 파일이 선택되었을 때만 실행
+		if (event.target.files && event.target.files[0]) {
+			const reader = new FileReader();
+		    reader.onload = async function (event) {
+		    	ppath = event.target.result;
+		    	if(showImg[0].style.display=="none"){ 			//showImg 에는 하나의 값만 존재함 . 배열의 형태일뿐
+		    		var img = document.getElementById("noImg");
+		    		img.src = event.target.result;
+		    		img.style.display="block";
+		    	}else{
+		    		var img = document.getElementById("yImg");
+		    		img.src = event.target.result;
+		    	}
+	    		uploadNameInput.value = input.value.split("\\").pop();
+		    };
+		    reader.readAsDataURL(event.target.files[0]);
+		 }
 		
-		let xhrs = new XMLHttpRequest();
-		
-		xhrs.open("POST","/portfolio/saveDB.jsp?ptitle="+ptitle.value+"&pcontents="+pcontents.value+"&purl="+purl.value+"&pnum="+pnum+"&ppath="+ppath,true);
-		xhrs.send();
-		xhrs.onreadystatechange = function(){
-			if(xhrs.readyState == 4){
-				if(xhrs.responseText.trim() == "ok"){
-					alert("저장됨");
-				}else{
-					alert("저장실패");
-				}
-				
-			}
-		}
 	}
 	
+	function save(){
+		var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/portfolio/saveDB.jsp", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        var formData = "ptitle=" + encodeURIComponent(ptitle.value) +"&ptitle=" + encodeURIComponent(ptitle.value) + "&pcontents=" + encodeURIComponent(pcontents.value)
+        + "&ppath=" + encodeURIComponent(ppath)+ "&purl=" + encodeURIComponent(purl.value)+ "&pnum=" + encodeURIComponent(pnum);
+        xhr.send(formData);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.responseText.trim() == "ok") {
+                    alert("저장되었습니다.");
+                } else {
+                    alert("저장실패 ");
+                }
+
+            }
+        }
+	}
+
+	function savedb(){	//num은 테이블 번호 즉 몇번째 테이블인지 - 0부터 시작
+		ptitle = document.getElementById('ptitle');
+		pcontents = document.getElementById('pcontents');
+		purl = "testUrl";
+		pnum = '<%=request.getParameter("pnum")%>';
+		input = document.getElementById('file');
+		save();
+	}
 	</script>
+	
 </html>
