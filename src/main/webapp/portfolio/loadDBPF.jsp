@@ -13,5 +13,5 @@
 	session.setAttribute("portfolios", pdto);
 %>
 <script>
-location.href ="/portfolio/add.jsp";
+location.href ="/portfolio/add.jsp?pnum=" + <%=pnum %>;
 </script>

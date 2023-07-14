@@ -5,13 +5,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	System.out.println("===================save====");
+// 	System.out.println("===================save====");
 String ptitle = request.getParameter("ptitle"); //항목명
 String pcontents = request.getParameter("pcontents"); //항목명
 String purl = request.getParameter("purl"); //자소서 내용도 똑같이 가져와야함
 String pnum = request.getParameter("pnum");
 String ppath = request.getParameter("ppath");
-System.out.println("========="+ptitle+"========="+pcontents+"====");
+// System.out.println("========="+ptitle+"========="+pcontents+"====");
 
 PortfolioDAO pdao = new PortfolioDAO();
 

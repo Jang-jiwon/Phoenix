@@ -65,7 +65,7 @@
 			<div class="content" id="content" >
 				<h1 style="margin: 50px ;  ">포트폴리오</h1>
 			</div>
-			<div id="pfs" class="pfs"><button class="add" id="add" onclick="location='add.jsp'" style="align-content: center;" >추가</button></div>
+			<div id="pfs" class="pfs"><button class="add" id="add" onclick="location='loadadd.jsp?pnum=empty'" style="align-content: center;" >추가</button></div>
 <!-- 			<button class="add" id="add" >추가</button>  -->
 			
 <!-- 				<button class="add" id="add" onclick="newpf()">추가</button>  -->

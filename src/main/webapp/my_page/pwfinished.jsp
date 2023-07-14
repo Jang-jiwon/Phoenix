@@ -97,7 +97,13 @@ span.psw {
 </style>
 </head>
 <body >
-
+	<%
+// 		session.removeAttribute("session_member");
+		session.invalidate();
+	%>
+	<script >
+	sessionStorage.clear();
+	</script>
 	<div class = "left">
 		<header ></header>
 	</div>

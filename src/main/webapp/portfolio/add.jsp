@@ -161,6 +161,8 @@
 		var pcontents = document.getElementById('pcontents');
 		var purl = document.getElementById('pcontents');
 		var ppath = document.getElementById('ppath');
+		var pnum = "<%=request.getParameter("pnum")%>";
+		console.log("======pnum=======pnum========="+pnum+"===========");
 		
 		let xhrs = new XMLHttpRequest();
 		

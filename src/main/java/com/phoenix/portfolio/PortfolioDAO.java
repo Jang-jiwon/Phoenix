@@ -1,5 +1,6 @@
 package com.phoenix.portfolio;
 
+import java.sql.Clob;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +19,13 @@ public class PortfolioDAO {
 		sqlsession = factory.openSession(true);
 	}
 	
+	public void makeDB(String userid) {
+		sqlsession.insert("User.makeEmptyPofol", userid);
+		
+	}
+	
 	public boolean saveDB(PortfolioDTO portfolio) {
 		boolean result = false ;
-		
 		int cnt = 0;
 		cnt = sqlsession.selectOne("User.checkPortfolio", portfolio);
 		if(cnt == 0) {
@@ -38,6 +43,13 @@ public class PortfolioDAO {
 		return result;
 	}
 	
+	
+//	public void loadadd(String userid) {
+//		
+//		sqlsession.selectOne("User.makeemptyPofol", userid);
+//		
+//	}
+	
 	public PortfolioDTO loadDB2(String userid,String pnum) {
 		PortfolioDTO Portfolios = new PortfolioDTO();
 		Portfolios.setPnum(pnum);
@@ -49,29 +61,21 @@ public class PortfolioDAO {
 	
 	public PortfolioDTO[] loadDB(String userid) {
 		 List<Map<String, Object>> result = sqlsession.selectList("User.loadPortfolios",userid);
-		 System.out.println("=====================result : "+result.get(0).get("PCONTENTS")+"==================");
 		 //{PNUM=100, USERID=admin, PPATH=/path/to/file, PURL=http://example.com, PTITLE=Portfolio Title, PCONTENTS=oracle.sql.CLOB@d2450a}
-		 PortfolioDTO[] Portfolios = new PortfolioDTO[result.size()];
+		 PortfolioDTO[] portfolios = new PortfolioDTO[result.size()];
 		 
 //		 System.out.println("=====================coverletter==================");
-			for(int i=0;i<Portfolios.length;i++) {
-				Portfolios[i] = new PortfolioDTO();
-				Portfolios[i].setPnum((String) result.get(i).get("PNUM"));
-				Portfolios[i].setUserid((String) result.get(i).get("USERID"));
-				Portfolios[i].setPpath((String) result.get(i).get("PPATH"));
-				Portfolios[i].setPurl((String) result.get(i).get("PURL"));
-				System.out.println("====================="+Portfolios[i].getPurl()+"==================");
-				Portfolios[i].setPtitle((String) result.get(i).get("PTITLE"));
-				Portfolios[i].setPcontents("clob타입이라 따로가져오키");
-//				System.out.println("=================PCONTENTS : "+result.get(i).get("PCONTENTS")+"===============");
-
-				
+			for(int i=0;i<portfolios.length;i++) {
+				portfolios[i] = new PortfolioDTO();
+				portfolios[i].setPnum((String) result.get(i).get("pnum"));
+				portfolios[i].setUserid(userid);
+				portfolios[i].setPpath((String) result.get(i).get("ppath"));
+				portfolios[i].setPurl((String) result.get(i).get("purl"));
+				portfolios[i].setPtitle((String) result.get(i).get("ptitle"));
+				portfolios[i].setPcontents((String) result.get(i).get("pcontents"));
 			}
-//			System.out.println("==================================================");
 		
-		
-		
-		return Portfolios;
+		return portfolios;
 	}
 	
 }

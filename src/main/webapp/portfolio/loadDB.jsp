@@ -15,8 +15,11 @@ PortfolioDAO pDao = new PortfolioDAO();
 
 PortfolioDTO[] portfolios = pDao.loadDB(userid);
 
+
+
 for(int i=0;i<portfolios.length;i++){
 	System.out.println("=====================나간다개굴이==================");
+// 	System.out.println("바뀐내용 : "+portfolios[i].getPpath());
  	out.print("/--/");
  	out.print(portfolios[i].getUserid());
  	out.print("&--&");

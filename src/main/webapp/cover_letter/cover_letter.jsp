@@ -176,6 +176,7 @@ function makeDBtable(len,tbDB) {
 var recentid=0;
 for (var i=0 ; i<len ; i++){
 	var strs =tbDB[i+1].split('&');
+	console.log("======strsstrsstrs========"+strs+"============");
 	var ids = strs[0].split('_')[1]; //테이블 번호
 	recentid = (recentid>parseInt(ids))?recentid : ids;
 	sessionStorage.setItem("DBlen",parseInt(recentid)+1); //마지막번호 다음번호를 넘겨주는것
@@ -188,8 +189,7 @@ for (var i=0 ; i<len ; i++){
 					</tr>
 					<tr class="row2">
 						<td colspan="2">
-							<textarea maxlength="500" placeholder="자기소개 입력" style="resize: none;" id="ccontents_`+ ids +`" class="ccontents_`+ ids +`" name="ccontents_`+ ids +`">
-							`+strs[2]+`</textarea>
+							<textarea maxlength="500" placeholder="자기소개 입력" style="resize: none;" id="ccontents_`+ ids +`" class="ccontents_`+ ids +`" name="ccontents_`+ ids +`">`+strs[2]+`</textarea>
 						</td>
 					</tr>
 				</table>

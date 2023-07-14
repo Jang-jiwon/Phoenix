@@ -10,7 +10,8 @@
 </head>
 <body>
 	<%
-		session.removeAttribute("session_member");
+	session.invalidate();
+// 		session.removeAttribute("session_member");
 		// session.invalidate();
 		response.sendRedirect("/login/login.jsp");
 	%>
