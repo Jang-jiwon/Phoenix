@@ -88,13 +88,13 @@ input[type=text] ,textarea{
 				<table border="1" id="tb_${data.cnum }">
 					<tr class="row1">
 						<td class="col1">
-							<input type="text" placeholder="항목 입력" value="${data.ctitle }">
+							<input type="text" placeholder="소제목 입력" value="${data.ctitle }">
 						</td>
 						<td class="col2"> <button class="X" onclick="delDB('${data.cnum }')" >×</button> </td>
 					</tr>
 					<tr class="row2">
 						<td colspan="2">
-							<textarea maxlength="500" placeholder="자기소개 입력" style="resize: none;" >${data.ccontents}</textarea>
+							<textarea maxlength="600" placeholder="자기소개 입력 (600자 이하)" style="resize: none;" >${data.ccontents}</textarea>
 						</td>
 					</tr>
 				</table>

@@ -76,23 +76,20 @@ function delDB(id){
 	}
 }
 
-//새로운거는 저장하면 ajax로 저장하고서 생성된 id값 반환받아서 table에 id추가해주기
-sessionStorage.setItem("newDBnum",0);//새로운 테이블에 줄 임의의 데이터
+var newDBnum = 0;
 function add(){
-	var newDBnum = sessionStorage.getItem("newDBnum");
 	newDBnum = parseInt(newDBnum)+1;
-	sessionStorage.setItem("newDBnum",newDBnum);
 
 	newTable = `<table border="1" id="new_`+newDBnum+`" >
 					<tr class="row1">
 					<td class="col1">
-						<input type="text" placeholder="항목 입력" >
+						<input type="text" placeholder="소제목 입력" >
 					</td>
 					<td class="col2"> <button class="X" onclick="delDB('new_`+newDBnum+`')" >×</button> </td>
 				</tr>
 				<tr class="row2">
 					<td colspan="2">
-						<textarea maxlength="500" placeholder="자기소개 입력" style="resize: none;" ></textarea>
+						<textarea maxlength="500" placeholder="자기소개 입력(600자 이하)" style="resize: none;" ></textarea>
 					</td>
 				</tr>
 			</table>
