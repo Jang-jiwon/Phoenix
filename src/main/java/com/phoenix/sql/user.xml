@@ -55,9 +55,17 @@
 		DELETE FROM coverletter WHERE USERID = #{userid} AND CNUM =#{cnum}
 	</delete>
 	
+	<delete id="delPortfolio" parameterType="PortfolioDTO">
+		DELETE FROM portfolio WHERE USERID = #{userid} AND PNUM = #{pnum}
+	</delete>
+	
 	<insert id="savecl" parameterType="coverletterdto">
-		INSERT INTO coverletter VALUES (#{cnum},#{ctitle},#{ccontents}, #{userid})
+		INSERT INTO coverletter VALUES (cnum_seq.nextval,#{ctitle},#{ccontents}, #{userid})
 	</insert>
+	
+	<select id="getNewCLID" parameterType="string" resultType="int">
+		SELECT * FROM ( SELECT * FROM coverletter WHERE USERID = #{userid} ORDER BY cnum DESC ) WHERE ROWNUM = 1
+	</select>
 	
 	<select id="loadCoverLetter" parameterType="coverletterdto" resultType="map">
 		SELECT *  FROM coverletter WHERE USERID = #{userid}

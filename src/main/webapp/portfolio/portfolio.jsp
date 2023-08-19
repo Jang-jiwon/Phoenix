@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,24 +8,30 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="../division.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<style>
+<link rel="stylesheet" href="pf.css">
+<style type="text/css">
 	div.all {
-		width: 100%;
+		display: flex;
 	}
 	div.left {	
-		width: 20%;
-		float: left;
+	  	flex: 0 0 270px; 
+	 	 min-width: 270px; 
 	}
 	div.right {
-		width: 80%;
-		float: right;
+ 		 flex: 1; 
 	}
 	div.content {
 		margin: 0 auto;
 		text-align: center;
 	}
-	div.pfs{
-	height: 400px;
+
+	.pfs{
+		display: grid;
+	    justify-content: center;
+	    align-items: center;
+	    justify-items: center;
+	    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+	     grid-gap: 0px 50px;
 	}
 	
 	div.panel{
@@ -56,73 +63,40 @@
 </style>
 </head>
 <body>
+
 	<div class="all">
 		<div class = "left">
 			<header ></header>
 		</div>
-		
 		<div class = "right" id="right" >
 			<div class="content" id="content" >
 				<h1 style="margin: 50px ;  ">포트폴리오</h1>
 			</div>
-			<div id="pfs" class="pfs"><button class="add" id="add" onclick="location='loadadd.jsp?pnum=empty'" style="align-content: center;" >추가</button></div>
-			
+			<button class="add" id="add" onclick="location='loadadd.jsp?pnum=empty'" style="align-content: center;" >추가</button>
+			<div id="pfs" class="pfs">
+				<c:forEach var="pf" items="${arrPortfol}">
+					<div id="pnum${pf.pnum}" class = "panel"  onclick="gopf(pnum${pf.pnum}.id)" 
+					style="width: 300px; "   align="center">
+						<div style="height: 70%; width: 100%;display: flex;justify-content: center; align-items: center;" align="center">
+							<c:choose> 
+								<c:when test="${not empty pf.ppath }">
+									<img src="${pf.ppath}" style=" max-width: 100%;">
+								</c:when>
+							</c:choose>
+						</div>	
+						<h2 style="height: 30%;align-items: center;display: inline-flex ;">${pf.ptitle}</h2>
+					</div>
+				</c:forEach>
+			</div>
 		</div>
 	</div>
 </body>
-	<script src="/header.js">
-	</script>
+<script src="/header.js"></script>
 	
-	<script>
-			let xhr4 = new XMLHttpRequest();
-			
-			xhr4.open("POST","/portfolio/loadDB.jsp",true);//tableNum 이 cnum임
-			xhr4.send();
-			xhr4.onreadystatechange = function(){
-				if (xhr4.readyState == 4)  {
-					var DB = xhr4.responseText.trim();
-				    const status = xhr4.status;
-				    if(status === 0 || (status >= 200 && status < 400)) {
-				      console.log('success portfolio loadDB...');
-				      var DB = xhr4.responseText.trim();
-				      // /기준으로 각각 다른 포트폴리오
-				      // & 기준으로 포트폴리오별 요소
-				      tbDB = DB.split('/--/');
-					  makeDBtable(tbDB); //테이블 코드 생성
-				    } else {
-				      console.log('fail portfolio loadDB...');
-				    }
-				  }
-			}
-			var DBtableCode = [];
-			function makeDBtable(tbDB) {
-				var n=0;
-				for (var i=1 ; i<tbDB.length; i++){
-					if(i%3==1){
-						var div_ = `<div id="pfs`+i+`" class="pfs`+i+`" style="width:100%; height:370px;display: flex;"></div>`;
-						$("#pfs").append(div_);
-						n=i;
-						
-					}
-					//tbDB[1] = tb_1&수정제목11&수정내용11
-					var strs =tbDB[i].split('&--&');//테이블번호 , 타이틀 , 대표이미지주소 - 104,Portfolio Title,/portfolio/imgs/ex.png
-					console.log("==================strs :"+strs[0]+"============");
-					DBtableCode[i] =  `<div id="pnum`+strs[1]+`" class = "panel"  onclick="gopf(pnum`+strs[1]+`.id)" style="width: 300px;" align="center">
-					<div style="height: 70%; width: 100%;display: flex;justify-content: center; align-items: center;" align="center">
-						<img src="`+strs[3]+`" alt="My Image" style="width: 100%; height: 100%;">
-					</div>	
-					
-						<h2 style="height: 30%;align-items: center;display: inline-flex ;">`+strs[2]+`</h2>
-					</div>`;//이거 코드 수정해야함
-					$("#pfs"+n).append(DBtableCode[i]);
-					
-				}
-			}
-			
+<script>
 	function gopf(pnums) {
 		var  pnum = pnums.substr(4,pnums.length);
 		location.href="/portfolio/loadDBPF.jsp?pnum=" + pnum;
 	}
-
 </script>
 </html>

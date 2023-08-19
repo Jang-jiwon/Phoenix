@@ -1,3 +1,4 @@
+<%@page import="com.phoenix.action.ActionForward"%>
 <%@page import="com.phoenix.portfolio.PortfolioDAO"%>
 <%@page import="com.phoenix.portfolio.PortfolioDTO"%>
 <%@page import="com.phoenix.user.dao.UserDTO"%>
@@ -5,7 +6,6 @@
     pageEncoding="UTF-8"%>
     
 <%
-System.out.println("=====================들아왓다개굴이==================");
 UserDTO userinf = (UserDTO)session.getAttribute("session_member");
 String userid = userinf.getUserid();
 
@@ -15,20 +15,11 @@ PortfolioDAO pDao = new PortfolioDAO();
 
 PortfolioDTO[] portfolios = pDao.loadDB(userid);
 
+session.setAttribute("arrPortfol", portfolios);
 
 
-for(int i=0;i<portfolios.length;i++){
-	System.out.println("=====================나간다개굴이==================");
-// 	System.out.println("바뀐내용 : "+portfolios[i].getPpath());
- 	out.print("/--/");
- 	out.print(portfolios[i].getUserid());
- 	out.print("&--&");
- 	out.print(portfolios[i].getPnum());
- 	out.print("&--&");
- 	out.print(portfolios[i].getPtitle());
- 	out.print("&--&");
- 	out.print(portfolios[i].getPpath());
- 	
- 	
-}
 %>
+
+<script>
+location.href="/portfolio/portfolio.jsp";
+</script>

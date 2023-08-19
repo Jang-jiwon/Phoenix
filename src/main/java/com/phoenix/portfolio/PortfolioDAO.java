@@ -24,6 +24,14 @@ public class PortfolioDAO {
 		
 	}
 	
+	public void delDB(String userid , String pnum) {
+		PortfolioDTO dto = new PortfolioDTO();
+		dto.setUserid(userid);
+		dto.setPnum(pnum);
+		sqlsession.delete("User.delPortfolio",dto);
+	}
+	
+	
 	public boolean saveDB(PortfolioDTO portfolio) {
 		boolean result = false ;
 		int cnt = 0;

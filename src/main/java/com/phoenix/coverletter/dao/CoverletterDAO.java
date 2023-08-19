@@ -1,8 +1,10 @@
 package com.phoenix.coverletter.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -24,74 +26,50 @@ public class CoverletterDAO {
 
 		 CoverletterDTO[] coverletterArray = new CoverletterDTO[result.size()];
 		 
-		System.out.println("=====================coverletter==================");
 		for(int i=0;i<result.size();i++) {
-//			System.out.println(result.get(i).get("CCONTENTS"));
 			coverletterArray[i] = new CoverletterDTO();
 			coverletterArray[i].setCcontents((String) result.get(i).get("CCONTENTS"));
 			coverletterArray[i].setCtitle((String) result.get(i).get("CTITLE"));
 			coverletterArray[i].setCnum((String) result.get(i).get("CNUM"));
 			coverletterArray[i].setUserid((String) result.get(i).get("USERID"));
 		}
-		System.out.println("==================================================");
 		
 		return coverletterArray;
 	}
 	
 	public int getCLlen(CoverletterDTO coverletter) {
 		int len = 0;
-		System.out.println("=====================len : "+len+"==================");
 		len = sqlsession.selectOne("User.checkCoverLetterLen",coverletter);
 		
-		System.out.println("=====================len : "+len+"==================");
 		return len;
 	}
 	
-	public boolean saveCL(CoverletterDTO coverletter) {
-		boolean result = false;
-		
-		
-		//네임스페이스 나중에 바꾸끼
-		
-		int cnt = 0;
-		cnt = sqlsession.selectOne("User.checkCoverLetter", coverletter);
-		System.out.println("==================cnt : "+cnt+"==================");
-		if( cnt == 1 ) {
-			System.out.println("=========1에들어옴====");
-			//이미있는 디비
-			if(sqlsession.update("User.updateCoverLetter", coverletter) == 1) {
-				result = true;
+	public int saveCL(CoverletterDTO coverletter) {
+		try {
+			if(coverletter.getCnum().startsWith("new_")) {	//새데이터 삽입
+				sqlsession.insert("User.savecl", coverletter);
+				int newCnum = sqlsession.selectOne("getNewCLID", coverletter.getUserid());
+				System.out.println("결과 : "+newCnum);
+				return newCnum;
+			}else {	//기존 데이터 수정
+				sqlsession.update("User.updateCoverLetter", coverletter);
+				return 0;//성공
 			}
-		}else {
-			System.out.println("=========2에들어옴====");
-			if(sqlsession.insert("User.savecl", coverletter) == 1) {
-				result = true;
-			}
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			return -1;//실패
 		}
-		
-		
-		return result;
 	}
 	
-	public int delCL(CoverletterDTO dto) {
-		int result = 0; // 0 - 실패 1-있는정보삭제 2-빈테이블만삭제
-		
-		int cnt = 0;
-		cnt = sqlsession.selectOne("User.checkCoverLetter", dto);
-		System.out.println("==================cnt : "+cnt+"==================");
-		if( cnt == 1 ) {
-			System.out.println("=========1에들어옴====");
-			System.out.println("=========jefhsdjil에들어옴====");
-			if(sqlsession.delete("User.delCoverLetter",dto) == 1) {
-				result = 1;
-			}
-		}else {
-			result = 2;
+	public boolean delCL(CoverletterDTO dto) {
+		try {
+			sqlsession.delete("User.delCoverLetter",dto);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
-		
-		
-		
-		return result;
+
 	}
 	
 	

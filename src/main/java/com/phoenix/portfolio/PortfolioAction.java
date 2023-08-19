@@ -16,7 +16,6 @@ public class PortfolioAction implements Action{
 	    UserDTO member = (UserDTO) session.getAttribute("session_member");
 	    
 	    String userid = member.getUserid();
-	    System.out.println("=================ptitle : "+request.getParameter("ptitle")+"===============");
 	    PortfolioDTO portfolio = new PortfolioDTO(
 	    		request.getParameter("ptitle"),
 	    		request.getParameter("pcontents"), 

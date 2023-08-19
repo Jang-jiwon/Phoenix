@@ -69,7 +69,7 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 	}
 	
 	/* 저장 버튼 */
-	button.save{
+	button.save , button.del{
 		margin-top: 10px;
 		display:inline-block;
 		width: 60px;
@@ -103,10 +103,21 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 		
 		<div class = "right" >
 			<div>
-				<form method="post" name="boardForm" action="/portfolio/portfolio.pf">
-					<table style="width: 900px; border: 0px;">
+				<form method="post" name="boardForm" action="/portfolio/portfolio.pf" id="frm">
+					<table style="margin: 0 auto;  width: 80%; border: 0px;">
 						<tr align="center" valign="middle">
 							<td><h1>포트폴리오</h1></td>
+						</tr>
+						<tr style="display: flex; margin: 0 auto;">
+							<td>
+								<% String pNum = request.getParameter("pnum"); %>
+								<c:set var="pNum" value="<%=pNum%>" />
+								<c:choose> 
+									<c:when test="${pNum != 'empty' }" > 
+										<button class="del" id="del" type="button" onclick="delDB('${pNum}');">삭제</button>
+									</c:when>
+								</c:choose>
+							</td>
 						</tr>
 					</table>
 					<table border="1" style="border-collapse:collapse;background-color:white;">
@@ -144,8 +155,6 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 								<div class="filebox" style="display: flex; padding-right : 5px;">
 								    <input id="upload-name"  class="upload-name" placeholder="대표이미지" style="border: none;" readonly="readonly">
 								    <label for="file" style="padding-left: 14px;">파일찾기</label> 
-<!-- 								    https://m.blog.naver.com/whatacodingday/221844492754
-										- 파일가져오기참고링크..? -->
 								    <input type="file" id="file" class="file" accept="image/*" onchange="changeImg(event);" > 
 								</div>
 							</td>
@@ -169,6 +178,14 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 	var input;
 	var showImg;
 	var uploadNameInput;
+	
+	
+	function delDB(id){
+		alert(id);
+		location.href="/portfolio/delDB.jsp?pnum="+id;
+	}
+	
+	
 	
 	function changeImg(event) {
 		uploadNameInput = document.querySelector(".upload-name");
@@ -205,6 +222,7 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
             if (xhr.readyState == 4) {
                 if (xhr.responseText.trim() == "ok") {
                     alert("저장되었습니다.");
+                    location.href="/portfolio/portfolio.jsp";
                 } else {
                     alert("저장실패 ");
                 }
@@ -214,6 +232,7 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 	}
 
 	function savedb(){	//num은 테이블 번호 즉 몇번째 테이블인지 - 0부터 시작
+		var frm = document.getElementById('frm');
 		ptitle = document.getElementById('ptitle');
 		pcontents = document.getElementById('pcontents');
 		purl = "testUrl";

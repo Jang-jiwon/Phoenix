@@ -15,7 +15,7 @@
 	%>
 		<script>
 			alert("로그인 성공");
-			location.href ="/portfolio/portfolio.jsp";
+			location.href ="/portfolio/loadDB.jsp";
 		</script>
 	<%} else { // 로그인 실패 %>
 		<script>

@@ -23,7 +23,7 @@ pfDto.setPurl(purl);
 pfDto.setPpath(ppath);
 pfDto.setUserid(userid);
 pfDto.setPnum(pnum);
-System.out.println("=================pfDto : "+pfDto.getPpath().length()+"===============");
+
 if(pdao.saveDB(pfDto)){
 	//저장완료
 	out.print("ok");//결과값을 자신을 부른 곳으로 넘겨주는
