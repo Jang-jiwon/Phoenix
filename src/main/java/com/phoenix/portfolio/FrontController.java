@@ -32,7 +32,7 @@ public class FrontController extends HttpServlet{
 			String requestURI = request.getRequestURI();
 			ActionForward forward = null;
 					
-			if( requestURI.equals("/portfolio/portfolio.pfgg") ) {
+			if( requestURI.equals("/portfolio/portfolio.pf") ) {
 				forward = new PortfolioAction().execute(request, response);
 			} 
 			

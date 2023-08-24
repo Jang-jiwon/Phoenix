@@ -9,7 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
-@WebFilter("/*")
+@WebFilter("/*") 
 public class CharacterEncodingFilter implements Filter {
 
 	@Override
@@ -17,17 +17,11 @@ public class CharacterEncodingFilter implements Filter {
 			ServletResponse arg1, FilterChain arg2)
 			throws IOException, ServletException {
 		
-//		System.out.println("before filter");
-		// filgerChain으로 다음 작업 진행 여부를 정한다.
-		
 		arg0.setCharacterEncoding("UTF-8");
 		
 		arg1.setCharacterEncoding("UTF-8");
 		arg1.setContentType("text/html; charset=UTF-8");
-		
-		
 		arg2.doFilter(arg0, arg1);
-//		System.out.println("after filter");
 		
 	}
 

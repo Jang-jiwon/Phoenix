@@ -14,28 +14,28 @@ public class PortfolioAction implements Action{
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse resp) {
 		HttpSession session = request.getSession();
 	    UserDTO member = (UserDTO) session.getAttribute("session_member");
-	    
 	    String userid = member.getUserid();
 	    PortfolioDTO portfolio = new PortfolioDTO(
+	    		request.getParameter("pnum"),
 	    		request.getParameter("ptitle"),
 	    		request.getParameter("pcontents"), 
 	    		request.getParameter("purl"), 
 	    		request.getParameter("ppath"), 
-	    		member.getUserid());
-	    
+	    		userid);
 	    ActionForward forward = new ActionForward();
-	    
 	    PortfolioDAO pdao = new PortfolioDAO();
+	    boolean re = pdao.saveDB(portfolio);
 	    
-	    if(pdao.saveDB(portfolio)) {
-			forward.setPath("/portfolio/finished.jsp");
+	    if(re) {
+//	    	System.out.println("시발:"+portfolio.getPnum());
+			forward.setPath("/portfolio/loadDB.jsp");
 			forward.setRedirect(true);
 		} else {
-			forward.setPath("/index.jsp");
+			forward.setPath("/main_view.jsp");
 			forward.setRedirect(true);
 		}
-	    
-		return null;
+		
+		return forward;
 	}
 
 }

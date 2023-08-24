@@ -15,7 +15,7 @@
 		INSERT INTO "member" VALUES (#{userid},#{userpw},#{useremail},#{userphone})
 	</insert>
 	
-	<insert id="savePortfolio" parameterType="PortfolioDTO">
+	<insert id="savePortfolio" parameterType="PortfolioDTO" >
 		INSERT INTO portfolio
 	VALUES 	(portfolio_seq.nextval, 
 			   #{ptitle}, 

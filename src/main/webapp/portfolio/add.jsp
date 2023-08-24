@@ -103,18 +103,17 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 		
 		<div class = "right" >
 			<div>
-				<form method="post" name="boardForm" action="/portfolio/portfolio.pf" id="frm">
+				<form method="post" name="boardForm" action="${pageContext.request.contextPath}/portfolio/portfolio.pf" id="frm">
 					<table style="margin: 0 auto;  width: 80%; border: 0px;">
 						<tr align="center" valign="middle">
 							<td><h1>포트폴리오</h1></td>
 						</tr>
 						<tr style="display: flex; margin: 0 auto;">
 							<td>
-								<% String pNum = request.getParameter("pnum"); %>
-								<c:set var="pNum" value="<%=pNum%>" />
+								<input style="display:none;" name="pnum" id="pnumInput" value="${portfolios.pnum}" >
 								<c:choose> 
-									<c:when test="${pNum != 'empty' }" > 
-										<button class="del" id="del" type="button" onclick="delDB('${pNum}');">삭제</button>
+									<c:when test="${portfolios.pnum != 'empty' }" > 
+										<button class="del" id="del" type="button" onclick="delDB('${portfolios.pnum}');">삭제</button>
 									</c:when>
 								</c:choose>
 							</td>
@@ -124,19 +123,19 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 						<!-- 제목 -->
 						<tr height="50px">
 							<td>
-								<input type="text" id="ptitle" class = "ptitle" placeholder="  제목" value="${portfolios.ptitle}">
+								<input type="text" id="ptitle"  name="ptitle" class = "ptitle" placeholder="  제목" value="${portfolios.ptitle}">
 							</td>
 						</tr>
 						<!-- 내용 -->
 						<tr height="300px">
 							<td>
-								<textarea id="pcontents" placeholder="  내용">${portfolios.pcontents}</textarea>					
+								<textarea id="pcontents" placeholder="  내용"  name="pcontents" >${portfolios.pcontents}</textarea>					
 							</td>
 						</tr>
 						<!-- 링크 -->
 						<tr>
 							<td class="form-group" >
-								<input type="text" id="purl" class="purl" placeholder="  URL 추가" value="${portfolios.purl}" >
+								<input type="text" id="purl" name="purl" class="purl" placeholder="  URL 추가" value="${portfolios.purl}" >
 							</td>
 						</tr>
 						<!-- 이미지 -->
@@ -156,12 +155,21 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 								    <input id="upload-name"  class="upload-name" placeholder="대표이미지" style="border: none;" readonly="readonly">
 								    <label for="file" style="padding-left: 14px;">파일찾기</label> 
 								    <input type="file" id="file" class="file" accept="image/*" onchange="changeImg(event);" > 
+								    <c:choose>
+								    	<c:when test="${not empty portfolios.ppath}"> 
+								    		<textarea id="ppath" name="ppath"  style="display:none;" >${portfolios.ppath}</textarea>
+								    	</c:when>
+								    	<c:otherwise>
+								    		<textarea id="ppath" name="ppath"  style="display:none;" ></textarea>
+								    	</c:otherwise>
+								    </c:choose>
 								</div>
 							</td>
 						</tr>
 					</table>
+					<button class="save" id="save" type="submit" >저장</button> 
 					<!-- 저장 -->
-					<button class="save" id="save" type="button" onclick="savedb()">저장</button>
+<!-- 					<button class="save" id="save" type="button" onclick="savedb()">저장</button> -->
 				</form>
 			</div>
 		</div>
@@ -181,7 +189,6 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 	
 	
 	function delDB(id){
-		alert(id);
 		location.href="/portfolio/delDB.jsp?pnum="+id;
 	}
 	
@@ -191,6 +198,7 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 		uploadNameInput = document.querySelector(".upload-name");
 		showImg = document.getElementsByClassName("isimg");
 		input = document.getElementById('file');
+		var newpath=document.getElementById('ppath');
 		// 파일이 선택되었을 때만 실행
 		if (event.target.files && event.target.files[0]) {
 			const reader = new FileReader();
@@ -200,6 +208,7 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 		    		var img = document.getElementById("noImg");
 		    		img.src = event.target.result;
 		    		img.style.display="block";
+		    		newpath.value = event.target.result;
 		    	}else{
 		    		var img = document.getElementById("yImg");
 		    		img.src = event.target.result;

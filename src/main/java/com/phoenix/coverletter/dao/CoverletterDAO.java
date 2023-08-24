@@ -69,7 +69,6 @@ public class CoverletterDAO {
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 	
 	

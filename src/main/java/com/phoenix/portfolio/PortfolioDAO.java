@@ -34,30 +34,19 @@ public class PortfolioDAO {
 	
 	public boolean saveDB(PortfolioDTO portfolio) {
 		boolean result = false ;
-		int cnt = 0;
+		
 		try {
-			cnt = sqlsession.selectOne("User.checkPortfolio", portfolio);
+			if(portfolio.getPnum().equals("empty")	) {
+				sqlsession.insert("User.savePortfolio", portfolio);
+			}else {
+				sqlsession.update("User.updatePortfolio", portfolio);
+			}
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(cnt == 0) {
-			if(sqlsession.insert("User.savePortfolio", portfolio) == 1) {
-				result = true;
-			}
-		}else {
-			if(sqlsession.update("User.updatePortfolio", portfolio) == 1) {
-				result = true;
-			}
-		}
 		return result;
 	}
-	
-	
-//	public void loadadd(String userid) {
-//		
-//		sqlsession.selectOne("User.makeemptyPofol", userid);
-//		
-//	}
 	
 	public PortfolioDTO loadDB2(String userid,String pnum) {
 		PortfolioDTO Portfolios = new PortfolioDTO();

@@ -206,32 +206,25 @@ ul ul a {
 
 <%
 	String loginhref = "/login/login.jsp";
-	String portfoliohref = "#";
-	String coverletterhref = "#";
-	String resumeshref = "#";
+	String portfoliohref = "/portfolio/loadDB.jsp";
+	String coverletterhref = "/cover_letter/load.jsp";
+	String resumeshref = "/resume/dbload.jsp";
 	String mypagehref = "/my_page/MyPage.my";
-	String avalue = "로그인"; 
+	String avalue ; 
 	
 	//세션에서 로그인 정보 가져오기
 	UserDTO member = (UserDTO)session.getAttribute("session_member");
 	
-	if(member==null){
-		//로그인x
-		portfoliohref = "/menu/menucontroller.jsp";
-		coverletterhref ="/menu/menucontroller.jsp";
-		resumeshref = "/menu/menucontroller.jsp";
-		mypagehref = "/menu/menucontroller.jsp";
-	}else{
+	if(member!=null){
 		//로그인o
-		loginhref = "/logout/logout.jsp";
-		portfoliohref = "/portfolio/loadDB.jsp";
-// 		coverletterhref = "/cover_letter/cover_letter.jsp";
-		coverletterhref = "/cover_letter/load.jsp";
-		resumeshref = "/resume/dbload.jsp";
-		mypagehref = "/my_page/MyPage.my";
 		avalue = "로그아웃";
+		loginhref = "/logout/logout.jsp";
+	}else{
+		//로그인x
+		avalue = "로그인"; 
+		loginhref = "/login/login.jsp";
 	}
-
+	
 %>
 
 <body>
